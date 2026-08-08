@@ -142,16 +142,16 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-vault-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fadeIn">
+      <div className="bg-slate-900 border border-slate-800 text-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-vault-white border-b border-vault-light p-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-vault-dark">Bit Vault Settings</h2>
+        <div className="sticky top-0 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 p-6 flex items-center justify-between z-10">
+          <h2 className="text-xl font-extrabold text-white tracking-tight">Bit Vault Settings</h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-vault-light rounded transition"
+            className="p-2 hover:bg-slate-800 rounded-xl transition text-slate-400 hover:text-white"
           >
-            <X className="w-6 h-6 text-vault-dark" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 

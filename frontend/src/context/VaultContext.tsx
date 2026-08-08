@@ -112,6 +112,13 @@ export const VaultProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
+  // Re-fetch items whenever active filters, search query, or unlock state changes
+  useEffect(() => {
+    if (isUnlocked) {
+      fetchItems();
+    }
+  }, [filterType, filterCategory, searchQuery, isUnlocked]);
+
   const fetchCategories = async () => {
     try {
       const fetchedCategories = await apiService.getCategories();

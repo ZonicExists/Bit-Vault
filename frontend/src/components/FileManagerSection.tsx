@@ -305,59 +305,59 @@ export const FileManagerSection: React.FC = () => {
       </div>
 
       {/* Storage Analytics Card */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-        <div className="md:col-span-2 space-y-2 border-r border-slate-100 pr-4">
-          <div className="flex items-center justify-between text-xs font-bold text-slate-700 uppercase tracking-wider">
+      <div className="bg-slate-900/90 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 shadow-xl grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+        <div className="md:col-span-2 space-y-2.5 md:border-r border-slate-800 md:pr-6">
+          <div className="flex items-center justify-between text-xs font-bold text-slate-300 uppercase tracking-wider">
             <span>Storage Capacity</span>
-            <span>{storageStats.totalMb} MB Used</span>
+            <span className="text-emerald-400 font-mono font-extrabold">{storageStats.totalMb} MB Used</span>
           </div>
-          <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+          <div className="w-full bg-slate-950 h-3 rounded-full overflow-hidden p-0.5 border border-slate-800">
             <div
-              className="bg-emerald-500 h-full transition-all duration-500 rounded-full"
+              className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full transition-all duration-500 rounded-full shadow-sm shadow-emerald-500/50"
               style={{ width: `${Math.min(100, (storageStats.totalBytes / (50 * 1024 * 1024)) * 100)}%` }}
             />
           </div>
           <p className="text-[11px] text-slate-400 font-medium">
-            {files.length} total encrypted file{files.length !== 1 ? 's' : ''} stored securely.
+            {files.length} total encrypted file{files.length !== 1 ? 's' : ''} stored under AES-256 vault.
           </p>
         </div>
 
-        <div className="md:col-span-2 grid grid-cols-4 gap-2 text-center">
-          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <span className="text-xs font-bold text-emerald-600 block">{storageStats.categoryCounts.image}</span>
-            <span className="text-[10px] font-semibold text-slate-500 uppercase">Images</span>
+        <div className="md:col-span-2 grid grid-cols-4 gap-2.5 text-center">
+          <div className="bg-slate-950/80 p-3 rounded-2xl border border-slate-800 shadow-inner">
+            <span className="text-sm font-extrabold text-emerald-400 font-mono block">{storageStats.categoryCounts.image}</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Images</span>
           </div>
-          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <span className="text-xs font-bold text-teal-600 block">{storageStats.categoryCounts.document}</span>
-            <span className="text-[10px] font-semibold text-slate-500 uppercase">Docs</span>
+          <div className="bg-slate-950/80 p-3 rounded-2xl border border-slate-800 shadow-inner">
+            <span className="text-sm font-extrabold text-teal-400 font-mono block">{storageStats.categoryCounts.document}</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Docs</span>
           </div>
-          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <span className="text-xs font-bold text-blue-600 block">{storageStats.categoryCounts.code}</span>
-            <span className="text-[10px] font-semibold text-slate-500 uppercase">Code</span>
+          <div className="bg-slate-950/80 p-3 rounded-2xl border border-slate-800 shadow-inner">
+            <span className="text-sm font-extrabold text-blue-400 font-mono block">{storageStats.categoryCounts.code}</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Code</span>
           </div>
-          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <span className="text-xs font-bold text-amber-600 block">{storageStats.categoryCounts.archive}</span>
-            <span className="text-[10px] font-semibold text-slate-500 uppercase">Archives</span>
+          <div className="bg-slate-950/80 p-3 rounded-2xl border border-slate-800 shadow-inner">
+            <span className="text-sm font-extrabold text-amber-400 font-mono block">{storageStats.categoryCounts.archive}</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Archives</span>
           </div>
         </div>
       </div>
 
       {/* Notifications */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center justify-between text-sm font-medium animate-fadeIn">
+        <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-2xl flex items-center justify-between text-sm font-medium animate-fadeIn">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-red-500" />
+            <AlertCircle className="w-5 h-5 text-red-400" />
             <span>{error}</span>
           </div>
-          <button onClick={() => setError(null)} className="text-red-400 hover:text-red-600 font-bold">
+          <button onClick={() => setError(null)} className="text-red-400 hover:text-red-300 font-bold">
             ✕
           </button>
         </div>
       )}
 
       {success && (
-        <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl flex items-center gap-2 text-sm font-medium animate-fadeIn">
-          <Check className="w-5 h-5 text-emerald-600" />
+        <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-2xl flex items-center gap-2 text-sm font-medium animate-fadeIn">
+          <Check className="w-5 h-5 text-emerald-400" />
           <span>{success}</span>
         </div>
       )}
@@ -367,15 +367,15 @@ export const FileManagerSection: React.FC = () => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`border-2 border-dashed rounded-2xl p-6 text-center transition-all ${
+        className={`border-2 border-dashed rounded-3xl p-8 text-center transition-all shadow-xl backdrop-blur-xl ${
           isDragging
-            ? 'border-emerald-500 bg-emerald-50/50 scale-[1.01]'
-            : 'border-slate-300 hover:border-emerald-400 bg-white/60'
+            ? 'border-emerald-400 bg-emerald-500/10 scale-[1.01]'
+            : 'border-slate-800 hover:border-emerald-500/50 bg-slate-900/60'
         }`}
       >
-        <HardDrive className={`w-10 h-10 mx-auto mb-2 transition ${isDragging ? 'text-emerald-500 animate-bounce' : 'text-slate-400'}`} />
-        <h3 className="font-bold text-slate-800 text-sm">Drag & Drop files here to encrypt instantly</h3>
-        <p className="text-xs text-slate-500 mt-0.5">Supports any file format (PDF, images, zip, code, binary keys)</p>
+        <HardDrive className={`w-10 h-10 mx-auto mb-3 transition ${isDragging ? 'text-emerald-400 animate-bounce' : 'text-slate-500'}`} />
+        <h3 className="font-extrabold text-white text-base">Drag & Drop files here to encrypt instantly</h3>
+        <p className="text-xs text-slate-400 mt-1 font-medium">Supports any file format (PDF, images, zip, code, binary keys)</p>
       </div>
 
       {/* Search, Filter Tabs & Controls */}
@@ -393,14 +393,14 @@ export const FileManagerSection: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setSelectedCategory(tab.id as CategoryFilter)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
+              className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition whitespace-nowrap flex items-center gap-2 ${
                 selectedCategory === tab.id
-                  ? 'bg-slate-900 text-white shadow-md'
-                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-extrabold shadow-lg shadow-emerald-500/20'
+                  : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800/80'
               }`}
             >
               <span>{tab.label}</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${selectedCategory === tab.id ? 'bg-slate-700 text-slate-200' : 'bg-slate-100 text-slate-500'}`}>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${selectedCategory === tab.id ? 'bg-slate-950/20 text-slate-950 font-extrabold' : 'bg-slate-800 text-slate-400'}`}>
                 {tab.count}
               </span>
             </button>
@@ -408,15 +408,15 @@ export const FileManagerSection: React.FC = () => {
         </div>
 
         {/* Toolbar: Search, Sort & View Mode */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3 border border-slate-200/90 rounded-2xl shadow-sm">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/90 p-3 border border-slate-800/80 rounded-2xl shadow-xl">
           <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 transform -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search file by name..."
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 text-xs font-medium"
+              className="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-800 rounded-xl focus:outline-none focus:border-emerald-500 text-xs font-medium text-white placeholder-slate-500"
             />
           </div>
 
@@ -425,7 +425,7 @@ export const FileManagerSection: React.FC = () => {
             {processedFiles.length > 0 && (
               <button
                 onClick={toggleSelectAll}
-                className="text-xs font-semibold text-slate-600 hover:text-slate-900 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition"
+                className="text-xs font-bold text-slate-300 hover:text-white px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition border border-slate-700"
               >
                 {selectedIds.length === processedFiles.length ? 'Deselect All' : 'Select All'}
               </button>
@@ -434,7 +434,7 @@ export const FileManagerSection: React.FC = () => {
             {selectedIds.length > 0 && (
               <button
                 onClick={handleBulkDelete}
-                className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1"
+                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Delete ({selectedIds.length})</span>
@@ -442,33 +442,33 @@ export const FileManagerSection: React.FC = () => {
             )}
 
             {/* Sort Selector */}
-            <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-2 py-1 text-xs">
+            <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs">
               <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="bg-transparent text-slate-700 font-semibold focus:outline-none text-xs"
+                className="bg-transparent text-slate-200 font-bold focus:outline-none text-xs"
               >
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="name">Name (A-Z)</option>
-                <option value="size_desc">Size (Largest)</option>
-                <option value="size_asc">Size (Smallest)</option>
+                <option value="newest" className="bg-slate-900 text-white">Newest First</option>
+                <option value="oldest" className="bg-slate-900 text-white">Oldest First</option>
+                <option value="name" className="bg-slate-900 text-white">Name (A-Z)</option>
+                <option value="size_desc" className="bg-slate-900 text-white">Size (Largest)</option>
+                <option value="size_asc" className="bg-slate-900 text-white">Size (Smallest)</option>
               </select>
             </div>
 
             {/* Grid / Table Toggle */}
-            <div className="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200">
+            <div className="flex items-center bg-slate-950 rounded-xl p-1 border border-slate-800">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-1.5 rounded-lg transition ${viewMode === 'grid' ? 'bg-white shadow-xs text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`p-1.5 rounded-lg transition ${viewMode === 'grid' ? 'bg-slate-800 text-emerald-400' : 'text-slate-500 hover:text-slate-300'}`}
                 title="Grid View"
               >
                 <LayoutGrid className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode('table')}
-                className={`p-1.5 rounded-lg transition ${viewMode === 'table' ? 'bg-white shadow-xs text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`p-1.5 rounded-lg transition ${viewMode === 'table' ? 'bg-slate-800 text-emerald-400' : 'text-slate-500 hover:text-slate-300'}`}
                 title="Table View"
               >
                 <List className="w-4 h-4" />
@@ -480,15 +480,15 @@ export const FileManagerSection: React.FC = () => {
 
       {/* Main Files Display */}
       {isLoading ? (
-        <div className="text-center py-16">
-          <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-emerald-500 border-t-transparent"></div>
-          <p className="text-xs text-slate-500 mt-3 font-semibold">Loading encrypted vault files...</p>
+        <div className="text-center py-16 space-y-3">
+          <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-emerald-400 border-t-transparent"></div>
+          <p className="text-xs text-slate-400 font-semibold tracking-wide uppercase">Decrypting encrypted files...</p>
         </div>
       ) : processedFiles.length === 0 ? (
-        <div className="bg-white border border-slate-200/90 rounded-2xl p-16 text-center shadow-sm">
-          <FileText className="w-14 h-14 text-slate-300 mx-auto mb-3" />
-          <h3 className="font-bold text-slate-800 text-lg">No encrypted files found</h3>
-          <p className="text-sm text-slate-500 mt-1 max-w-md mx-auto">
+        <div className="bg-slate-900/60 border border-slate-800/80 rounded-3xl p-16 text-center shadow-xl max-w-xl mx-auto space-y-3">
+          <FileText className="w-14 h-14 text-slate-600 mx-auto" />
+          <h3 className="font-extrabold text-white text-xl">No encrypted files found</h3>
+          <p className="text-sm text-slate-400 max-w-md mx-auto font-medium">
             {searchQuery || selectedCategory !== 'all'
               ? 'No files match your active search or category filters.'
               : 'Drag & drop or upload files to store them securely in your vault.'}
@@ -502,8 +502,8 @@ export const FileManagerSection: React.FC = () => {
             return (
               <div
                 key={file.id}
-                className={`bg-white border rounded-2xl p-4 shadow-sm hover:shadow-md transition-all group relative flex flex-col justify-between ${
-                  isSelected ? 'border-emerald-500 ring-2 ring-emerald-500/20 bg-emerald-50/10' : 'border-slate-200/90'
+                className={`bg-slate-900/90 border rounded-3xl p-5 shadow-xl hover:shadow-2xl transition-all group relative flex flex-col justify-between ${
+                  isSelected ? 'border-emerald-400 ring-2 ring-emerald-500/20 bg-emerald-500/5' : 'border-slate-800/80 hover:border-slate-700'
                 }`}
               >
                 <div>
@@ -513,20 +513,20 @@ export const FileManagerSection: React.FC = () => {
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => toggleSelect(file.id)}
-                        className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
+                        className="rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
                       />
-                      <div className="p-2.5 bg-slate-50 rounded-xl group-hover:bg-emerald-50 transition">
+                      <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800 group-hover:border-emerald-500/30 transition">
                         {getFileIcon(file.original_name, file.mime_type)}
                       </div>
                       <div className="min-w-0 flex-1">
                         <h4
-                          className="font-bold text-slate-800 text-sm truncate group-hover:text-emerald-600 transition cursor-pointer"
+                          className="font-extrabold text-white text-sm truncate group-hover:text-emerald-400 transition cursor-pointer"
                           onClick={() => handleOpenPreview(file)}
                           title={file.original_name}
                         >
                           {file.original_name}
                         </h4>
-                        <span className="text-[11px] text-slate-400 font-medium block mt-0.5">
+                        <span className="text-[11px] text-slate-400 font-mono font-medium block mt-0.5">
                           {(file.file_size / 1024).toFixed(1)} KB • {new Date(file.created_at).toLocaleDateString()}
                         </span>
                       </div>
@@ -534,19 +534,19 @@ export const FileManagerSection: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 pt-3 border-t border-slate-100 mt-2">
+                <div className="flex items-center gap-2 pt-4 border-t border-slate-800/80 mt-3">
                   <button
                     onClick={() => handleOpenPreview(file)}
-                    className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition text-xs font-semibold flex items-center justify-center gap-1"
+                    className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl transition text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-700"
                     title="Preview File"
                   >
-                    <Eye className="w-3.5 h-3.5" />
+                    <Eye className="w-3.5 h-3.5 text-emerald-400" />
                     Preview
                   </button>
 
                   <button
                     onClick={() => handleDownload(file.id, file.original_name)}
-                    className="flex-1 bg-emerald-50 hover:bg-emerald-500 text-emerald-700 hover:text-white font-semibold text-xs py-2 px-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow-2xs"
+                    className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs py-2 px-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-500/20"
                   >
                     <Download className="w-3.5 h-3.5" />
                     Decrypt & Download

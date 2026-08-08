@@ -277,39 +277,38 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-vault-white rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fadeIn">
+      <div className="bg-slate-900 border border-slate-800 text-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-vault-white border-b border-vault-light p-6 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 p-6 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
-            <div className="bg-vault-emerald/10 p-2 rounded-lg text-vault-emerald">
+            <div className="bg-emerald-500/10 p-2.5 rounded-2xl text-emerald-400 border border-emerald-500/20">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-vault-dark">Bit Vault Security Hub & Tools</h2>
-              <p className="text-xs text-vault-gray">Password Generator, Pwned Checker, 2FA & Audit</p>
+              <h2 className="text-xl font-extrabold text-white tracking-tight">Bit Vault Security Hub</h2>
+              <p className="text-xs text-slate-400 font-medium">Password Generator, Pwned Checker & Security Audit</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1 hover:bg-vault-light rounded transition">
-            <X className="w-6 h-6 text-vault-dark" />
+          <button onClick={onClose} className="p-2 hover:bg-slate-800 text-slate-400 hover:text-white rounded-xl transition">
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-vault-light flex overflow-x-auto">
+        <div className="border-b border-slate-800 flex overflow-x-auto bg-slate-950/60">
           {[
             { id: 'generator', label: 'Generator' },
             { id: 'pwned', label: 'Pwned Check' },
-            { id: 'audit', label: 'Security Score' },
-            { id: 'files', label: 'File Manager' }
+            { id: 'audit', label: 'Security Score' }
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-5 py-3 font-medium text-sm whitespace-nowrap transition border-b-2 ${
+              className={`px-6 py-3.5 font-bold text-xs whitespace-nowrap transition border-b-2 tracking-wide uppercase ${
                 activeTab === tab.id
-                  ? 'border-vault-emerald text-vault-emerald'
-                  : 'border-transparent text-vault-gray hover:text-vault-dark'
+                  ? 'border-emerald-400 text-emerald-400 bg-slate-900/80'
+                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
               }`}
             >
               {tab.label}
@@ -320,12 +319,12 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({ isOpen, onClose }) => {
         {/* Content */}
         <div className="p-6 space-y-6">
           {error && (
-            <div className="bg-vault-red/10 border border-vault-red text-vault-red px-4 py-3 rounded text-sm">
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-2xl text-xs font-medium animate-fadeIn">
               {error}
             </div>
           )}
           {success && (
-            <div className="bg-vault-emerald/10 border border-vault-emerald text-vault-emerald px-4 py-3 rounded text-sm">
+            <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-2xl text-xs font-medium animate-fadeIn">
               {success}
             </div>
           )}
@@ -334,21 +333,21 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({ isOpen, onClose }) => {
           {activeTab === 'generator' && (
             <div className="space-y-6">
               {/* Output Display */}
-              <div className="bg-vault-light/40 border border-vault-light p-4 rounded-xl flex items-center justify-between gap-4">
-                <div className="flex-1 font-mono text-lg font-bold text-vault-dark break-all">
+              <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-4 shadow-inner">
+                <div className="flex-1 font-mono text-lg font-extrabold text-white break-all tracking-wider">
                   {genResult?.password || 'Generating...'}
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={handleGeneratePassword}
-                    className="p-2 bg-vault-white hover:bg-vault-light rounded-lg border border-vault-light transition"
+                    className="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition"
                     title="Regenerate"
                   >
-                    <RefreshCw className={`w-5 h-5 text-vault-dark ${isLoading ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-4 h-4 text-emerald-400 ${isLoading ? 'animate-spin' : ''}`} />
                   </button>
                   <button
                     onClick={handleCopyPassword}
-                    className="px-4 py-2 bg-vault-emerald text-vault-white rounded-lg hover:bg-emerald-600 transition flex items-center gap-2 font-medium"
+                    className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold rounded-xl transition flex items-center gap-1.5 text-xs shadow-md shadow-emerald-500/20"
                   >
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {copied ? 'Copied!' : 'Copy'}
@@ -359,13 +358,13 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({ isOpen, onClose }) => {
               {/* Entropy & Strength Stats */}
               {genResult && (
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-vault-white border border-vault-light p-4 rounded-lg">
-                    <p className="text-xs text-vault-gray">Entropy Rating</p>
-                    <p className="text-xl font-bold text-vault-dark">{genResult.entropy_bits} bits</p>
+                  <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl shadow-inner">
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Entropy Rating</p>
+                    <p className="text-xl font-extrabold font-mono text-white mt-0.5">{genResult.entropy_bits} bits</p>
                   </div>
-                  <div className="bg-vault-white border border-vault-light p-4 rounded-lg">
-                    <p className="text-xs text-vault-gray">Strength Label</p>
-                    <span className="inline-block px-3 py-1 mt-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                  <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl shadow-inner">
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Strength Label</p>
+                    <span className="inline-block px-3 py-1 mt-1 rounded-full text-xs font-extrabold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
                       {genResult.strength_label}
                     </span>
                   </div>
@@ -373,11 +372,11 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({ isOpen, onClose }) => {
               )}
 
               {/* Settings Controls */}
-              <div className="space-y-4 pt-2 border-t border-vault-light">
+              <div className="space-y-4 pt-4 border-t border-slate-800">
                 <div>
-                  <div className="flex justify-between text-sm font-medium text-vault-dark mb-2">
-                    <span>Password Length</span>
-                    <span>{genLength} characters</span>
+                  <div className="flex justify-between text-xs font-bold text-slate-300 mb-2">
+                    <span>PASSWORD LENGTH</span>
+                    <span className="font-mono text-emerald-400">{genLength} characters</span>
                   </div>
                   <input
                     type="range"
@@ -388,57 +387,57 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({ isOpen, onClose }) => {
                       setGenLength(parseInt(e.target.value));
                       setTimeout(handleGeneratePassword, 0);
                     }}
-                    className="w-full accent-vault-emerald cursor-pointer"
+                    className="w-full accent-emerald-400 cursor-pointer bg-slate-950"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                <div className="grid grid-cols-2 gap-3 text-xs font-semibold text-slate-300">
+                  <label className="flex items-center gap-2 cursor-pointer bg-slate-950/60 p-3 rounded-xl border border-slate-800 hover:border-slate-700">
                     <input
                       type="checkbox"
                       checked={incUpper}
                       onChange={(e) => { setIncUpper(e.target.checked); setTimeout(handleGeneratePassword, 0); }}
-                      className="accent-vault-emerald"
+                      className="accent-emerald-400 rounded w-4 h-4 cursor-pointer"
                     />
                     <span>Uppercase (A-Z)</span>
                   </label>
 
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer bg-slate-950/60 p-3 rounded-xl border border-slate-800 hover:border-slate-700">
                     <input
                       type="checkbox"
                       checked={incLower}
                       onChange={(e) => { setIncLower(e.target.checked); setTimeout(handleGeneratePassword, 0); }}
-                      className="accent-vault-emerald"
+                      className="accent-emerald-400 rounded w-4 h-4 cursor-pointer"
                     />
                     <span>Lowercase (a-z)</span>
                   </label>
 
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer bg-slate-950/60 p-3 rounded-xl border border-slate-800 hover:border-slate-700">
                     <input
                       type="checkbox"
                       checked={incDigits}
                       onChange={(e) => { setIncDigits(e.target.checked); setTimeout(handleGeneratePassword, 0); }}
-                      className="accent-vault-emerald"
+                      className="accent-emerald-400 rounded w-4 h-4 cursor-pointer"
                     />
                     <span>Numbers (0-9)</span>
                   </label>
 
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer bg-slate-950/60 p-3 rounded-xl border border-slate-800 hover:border-slate-700">
                     <input
                       type="checkbox"
                       checked={incSymbols}
                       onChange={(e) => { setIncSymbols(e.target.checked); setTimeout(handleGeneratePassword, 0); }}
-                      className="accent-vault-emerald"
+                      className="accent-emerald-400 rounded w-4 h-4 cursor-pointer"
                     />
                     <span>Symbols (!@#$)</span>
                   </label>
 
-                  <label className="flex items-center gap-2 cursor-pointer col-span-2">
+                  <label className="flex items-center gap-2 cursor-pointer col-span-2 bg-slate-950/60 p-3 rounded-xl border border-slate-800 hover:border-slate-700">
                     <input
                       type="checkbox"
                       checked={avoidAmbiguous}
                       onChange={(e) => { setAvoidAmbiguous(e.target.checked); setTimeout(handleGeneratePassword, 0); }}
-                      className="accent-vault-emerald"
+                      className="accent-emerald-400 rounded w-4 h-4 cursor-pointer"
                     />
                     <span>Avoid Ambiguous Characters (l, 1, I, O, 0)</span>
                   </label>
@@ -452,7 +451,7 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({ isOpen, onClose }) => {
             <div className="space-y-6">
               <form onSubmit={handleCheckPwned} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-vault-dark mb-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
                     Check Password Against Data Breaches
                   </label>
                   <div className="flex gap-2">
@@ -461,35 +460,35 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({ isOpen, onClose }) => {
                       value={pwnedInput}
                       onChange={(e) => setPwnedInput(e.target.value)}
                       placeholder="Enter password to check..."
-                      className="flex-1 px-4 py-2 border border-vault-light rounded-lg focus:outline-none focus:border-vault-emerald"
+                      className="flex-1 px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:outline-none focus:border-emerald-500 text-xs font-medium text-white placeholder-slate-500"
                     />
                     <button
                       type="submit"
                       disabled={isLoading || !pwnedInput}
-                      className="bg-vault-emerald text-vault-white px-6 py-2 rounded-lg hover:bg-emerald-600 disabled:bg-vault-gray transition"
+                      className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-6 py-2.5 rounded-xl disabled:opacity-50 transition text-xs shadow-md shadow-emerald-500/20"
                     >
                       {isLoading ? 'Checking...' : 'Check Breach'}
                     </button>
                   </div>
-                  <p className="text-xs text-vault-gray mt-1">
+                  <p className="text-[11px] text-slate-500 mt-2 font-medium">
                     🔒 Uses 100% anonymized k-anonymity SHA-1 lookup (HaveIBeenPwned). Your password is never sent in cleartext.
                   </p>
                 </div>
               </form>
 
               {pwnedResult && (
-                <div className={`p-5 rounded-xl border ${pwnedResult.is_compromised ? 'bg-red-50 border-red-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                <div className={`p-5 rounded-2xl border ${pwnedResult.is_compromised ? 'bg-red-500/10 border-red-500/30 text-red-400' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'}`}>
                   <div className="flex items-center gap-3">
                     {pwnedResult.is_compromised ? (
-                      <ShieldAlert className="w-8 h-8 text-red-600" />
+                      <ShieldAlert className="w-8 h-8 text-red-400" />
                     ) : (
-                      <ShieldCheck className="w-8 h-8 text-emerald-600" />
+                      <ShieldCheck className="w-8 h-8 text-emerald-400" />
                     )}
                     <div>
-                      <h4 className={`font-bold ${pwnedResult.is_compromised ? 'text-red-800' : 'text-emerald-800'}`}>
+                      <h4 className="font-bold text-sm">
                         {pwnedResult.is_compromised ? 'COMPROMISED PASSWORD!' : 'Safe & Clean!'}
                       </h4>
-                      <p className="text-sm mt-1 text-vault-dark">
+                      <p className="text-xs mt-1 text-slate-300">
                         {pwnedResult.is_compromised
                           ? `This password has been seen in ${pwnedResult.breach_count.toLocaleString()} known data leaks. Do NOT use this password!`
                           : 'This password has not been found in known public data breaches.'}
@@ -506,104 +505,49 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({ isOpen, onClose }) => {
             <div className="space-y-6">
               {auditScore && (
                 <>
-                  <div className="bg-vault-light/30 border border-vault-light p-6 rounded-2xl flex items-center justify-between">
+                  <div className="bg-slate-950/80 border border-slate-800 p-6 rounded-2xl flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-bold text-vault-dark">Overall Vault Security Score</h3>
-                      <p className="text-xs text-vault-gray mt-1">Based on complexity, password reuse, and age</p>
+                      <h3 className="text-base font-extrabold text-white">Overall Vault Security Score</h3>
+                      <p className="text-xs text-slate-400 mt-1 font-medium">Based on complexity, password reuse, and age</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`text-4xl font-extrabold ${auditScore.score >= 80 ? 'text-emerald-600' : auditScore.score >= 50 ? 'text-amber-500' : 'text-red-600'}`}>
+                    <div className="flex items-center gap-2 font-mono">
+                      <span className={`text-4xl font-extrabold ${auditScore.score >= 80 ? 'text-emerald-400' : auditScore.score >= 50 ? 'text-amber-400' : 'text-red-400'}`}>
                         {auditScore.score}
                       </span>
-                      <span className="text-xl text-vault-gray font-bold">/ 100</span>
+                      <span className="text-lg text-slate-500 font-bold">/ 100</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-vault-white border border-vault-light p-4 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-red-600">{auditScore.weak_passwords_count}</p>
-                      <p className="text-xs text-vault-gray mt-1">Weak Passwords</p>
+                    <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl text-center">
+                      <p className="text-2xl font-extrabold font-mono text-red-400">{auditScore.weak_passwords_count}</p>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Weak Passwords</p>
                     </div>
-                    <div className="bg-vault-white border border-vault-light p-4 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-amber-500">{auditScore.reused_passwords_count}</p>
-                      <p className="text-xs text-vault-gray mt-1">Reused Groups</p>
+                    <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl text-center">
+                      <p className="text-2xl font-extrabold font-mono text-amber-400">{auditScore.reused_passwords_count}</p>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Reused Groups</p>
                     </div>
-                    <div className="bg-vault-white border border-vault-light p-4 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-blue-500">{auditScore.stale_passwords_count}</p>
-                      <p className="text-xs text-vault-gray mt-1">Stale (&gt;180 days)</p>
+                    <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-2xl text-center">
+                      <p className="text-2xl font-extrabold font-mono text-blue-400">{auditScore.stale_passwords_count}</p>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Stale (&gt;180 days)</p>
                     </div>
                   </div>
 
                   {/* Issues Detail */}
                   {auditScore.issues.weak_passwords.length > 0 && (
                     <div className="space-y-2">
-                      <h4 className="font-semibold text-sm text-vault-dark uppercase">Weak Passwords Needing Attention</h4>
+                      <h4 className="font-bold text-xs text-slate-400 uppercase tracking-wider">Weak Passwords Needing Attention</h4>
                       <div className="space-y-2 max-h-40 overflow-y-auto">
                         {auditScore.issues.weak_passwords.map((item) => (
-                          <div key={item.id} className="bg-red-50 border border-red-200 p-3 rounded-lg flex items-center justify-between text-xs">
-                            <span className="font-bold text-red-800">{item.title}</span>
-                            <span className="text-red-600">{item.reason}</span>
+                          <div key={item.id} className="bg-red-500/10 border border-red-500/30 p-3 rounded-xl flex items-center justify-between text-xs font-semibold">
+                            <span className="text-white">{item.title}</span>
+                            <span className="text-red-400">{item.reason}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                   )}
                 </>
-              )}
-            </div>
-          )}
-
-          {/* Tab 5: Encrypted File Manager */}
-          {activeTab === 'files' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-vault-light pb-4">
-                <div>
-                  <h3 className="font-bold text-vault-dark">Encrypted Vault Storage</h3>
-                  <p className="text-xs text-vault-gray">Files are encrypted with AES-256-GCM before writing to disk</p>
-                </div>
-
-                <label className="bg-vault-emerald text-vault-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition cursor-pointer flex items-center gap-2 text-sm font-medium">
-                  <Upload className="w-4 h-4" />
-                  {uploading ? 'Uploading...' : 'Upload File'}
-                  <input type="file" onChange={handleFileUpload} className="hidden" disabled={uploading} />
-                </label>
-              </div>
-
-              {vaultFiles.length === 0 ? (
-                <div className="text-center py-10">
-                  <FileText className="w-12 h-12 text-vault-gray mx-auto mb-2 opacity-50" />
-                  <p className="text-vault-dark font-medium">No encrypted files stored</p>
-                  <p className="text-xs text-vault-gray">Upload documents or files to encrypt them securely in your vault</p>
-                </div>
-              ) : (
-                <div className="space-y-3 max-h-80 overflow-y-auto">
-                  {vaultFiles.map((file) => (
-                    <div key={file.id} className="bg-vault-white border border-vault-light p-4 rounded-xl flex items-center justify-between">
-                      <div>
-                        <p className="font-semibold text-sm text-vault-dark">{file.original_name}</p>
-                        <p className="text-xs text-vault-gray mt-1">
-                          {(file.file_size / 1024).toFixed(1)} KB • {new Date(file.created_at).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleDownloadFile(file.id, file.original_name)}
-                          className="p-2 bg-vault-blue/10 text-vault-blue hover:bg-vault-blue/20 rounded-lg transition"
-                          title="Decrypt & Download"
-                        >
-                          <Download className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteFile(file.id)}
-                          className="p-2 bg-vault-red/10 text-vault-red hover:bg-vault-red/20 rounded-lg transition"
-                          title="Delete File"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
               )}
             </div>
           )}
