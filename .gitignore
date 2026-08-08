@@ -48,3 +48,8 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Specification Markdown Files
+FRONTEND_SPEC.md
+FRONTEND_CONTRACT.md
+ROADMAP.md
