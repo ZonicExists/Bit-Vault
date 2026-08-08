@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     AUTH_TAG_LENGTH_BYTES: int = 16
 
     AUTO_LOCK_DEFAULT_MINUTES: int = 15
+    MAX_UPLOAD_SIZE_MB: int = 100
+    ALLOWED_ORIGINS: str = "*"
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -1,4 +1,5 @@
 import os
+import re
 import uuid
 from datetime import datetime, timezone
 import sqlite3
@@ -14,6 +15,16 @@ from app.models.responses import success_response
 
 router = APIRouter(prefix="/api/files", tags=["File Manager"])
 
+def _sanitize_filename(name: str) -> str:
+    """Strip path components, control chars, and quotes to prevent header injection."""
+    # Take only the basename (no path traversal)
+    name = os.path.basename(name)
+    # Remove control characters, quotes, semicolons, and backslashes
+    name = re.sub(r'[\x00-\x1f\x7f"\'\\;]', '_', name)
+    # Collapse whitespace
+    name = name.strip()
+    return name if name else "download"
+
 @router.post("/upload", status_code=201)
 async def upload_file(
     file: UploadFile = File(...),
@@ -26,6 +37,17 @@ async def upload_file(
     
     file_bytes = await file.read()
     file_size = len(file_bytes)
+
+    # Enforce upload size limit
+    max_bytes = settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024
+    if file_size > max_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail={
+                "code": "FILE_TOO_LARGE",
+                "message": f"File exceeds maximum upload size of {settings.MAX_UPLOAD_SIZE_MB}MB."
+            }
+        )
     
     encrypted_filename = f"{file_id}.enc"
     encrypted_path = os.path.join(settings.STORAGE_DIR, encrypted_filename)
@@ -45,16 +67,14 @@ async def upload_file(
     )
     db.commit()
 
-    vault_file = VaultFile(
-        id=file_id,
-        original_name=original_name,
-        file_size=file_size,
-        mime_type=mime_type,
-        encrypted_path=encrypted_path,
-        created_at=now_iso
-    )
-
-    return success_response(vault_file.model_dump())
+    # Exclude encrypted_path from API response — internal detail
+    return success_response({
+        "id": file_id,
+        "original_name": original_name,
+        "file_size": file_size,
+        "mime_type": mime_type,
+        "created_at": now_iso
+    })
 
 @router.get("/{file_id}/download")
 def download_file(
@@ -84,8 +104,9 @@ def download_file(
 
     stream = read_and_decrypt_file(encrypted_path, master_key)
 
+    safe_name = _sanitize_filename(original_name)
     headers = {
-        "Content-Disposition": f'attachment; filename="{original_name}"'
+        "Content-Disposition": f'attachment; filename="{safe_name}"'
     }
 
     return StreamingResponse(

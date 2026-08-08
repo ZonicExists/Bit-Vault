@@ -20,10 +20,11 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS Middleware Setup
+# CORS Middleware Setup — restrict to configured origins
+_cors_origins = [o.strip() for o in settings.ALLOWED_ORIGINS.split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -50,13 +51,18 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
+    # Never leak internal details in production
+    if settings.NODE_ENV == "development":
+        error_message = str(exc)
+    else:
+        error_message = "An unexpected internal error occurred."
     return JSONResponse(
         status_code=500,
         content={
             "success": False,
             "error": {
                 "code": "INTERNAL_SERVER_ERROR",
-                "message": str(exc)
+                "message": error_message
             }
         }
     )

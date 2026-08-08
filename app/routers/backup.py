@@ -36,10 +36,10 @@ def export_backup(
         "magic": CONTAINER_MAGIC,
         "version": 1,
         "exported_at": datetime.now(timezone.utc).isoformat(),
-        "categories": categories,
-        "tags": tags,
-        "items": items,
-        "files": files
+        "categories": [dict(row) for row in categories],
+        "tags": [dict(row) for row in tags],
+        "items": [dict(row) for row in items],
+        "files": [dict(row) for row in files]
     }
 
     # Encrypt the complete backup package with master key
@@ -123,7 +123,7 @@ async def import_backup(
         cursor.execute(
             """
             INSERT OR REPLACE INTO files (id, original_name, file_size, mime_type, encrypted_path, created_at)
-            VALUES (?, ?, ?, ?, ?);
+            VALUES (?, ?, ?, ?, ?, ?);
             """,
             (f["id"], f["original_name"], f["file_size"], f["mime_type"], f["encrypted_path"], f["created_at"])
         )
