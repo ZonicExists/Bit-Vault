@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { LogOut, Settings, Search } from 'lucide-react';
+import { LogOut, Settings, Search, ShieldCheck } from 'lucide-react';
 import { useVault } from '../context/VaultContext';
 
 interface TopBarProps {
   onSearchChange: (query: string) => void;
   onSettingsClick: () => void;
+  onToolsClick: () => void;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ onSearchChange, onSettingsClick }) => {
+export const TopBar: React.FC<TopBarProps> = ({ onSearchChange, onSettingsClick, onToolsClick }) => {
   const { lock, searchQuery, setSearchQuery, autoLockMinutes } = useVault();
   const [showLockConfirm, setShowLockConfirm] = useState(false);
 
@@ -25,7 +26,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onSearchChange, onSettingsClick 
             <div className="bg-vault-emerald p-2 rounded-lg">
               <span className="text-lg font-bold text-vault-white">🔐</span>
             </div>
-            <h1 className="text-xl font-bold text-vault-dark hidden sm:block">Secure Vault</h1>
+            <h1 className="text-xl font-extrabold text-vault-dark hidden sm:block tracking-tight">Bit Vault</h1>
           </div>
 
           {/* Search Bar */}
@@ -44,6 +45,15 @@ export const TopBar: React.FC<TopBarProps> = ({ onSearchChange, onSettingsClick 
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            <button
+              onClick={onToolsClick}
+              className="p-2 hover:bg-vault-emerald/10 text-vault-emerald rounded-lg transition flex items-center gap-1.5 text-sm font-medium border border-vault-emerald/30"
+              title="Security Hub & Tools"
+            >
+              <ShieldCheck className="w-5 h-5" />
+              <span className="hidden md:inline">Tools</span>
+            </button>
+
             <button
               onClick={onSettingsClick}
               className="p-2 hover:bg-vault-light rounded-lg transition"

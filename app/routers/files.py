@@ -25,6 +25,16 @@ def _sanitize_filename(name: str) -> str:
     name = name.strip()
     return name if name else "download"
 
+@router.get("")
+def list_files(
+    db: sqlite3.Connection = Depends(get_db),
+    master_key: bytes = Depends(require_unlocked_vault)
+):
+    cursor = db.cursor()
+    cursor.execute("SELECT id, original_name, file_size, mime_type, created_at FROM files;")
+    rows = cursor.fetchall()
+    return success_response(rows)
+
 @router.post("/upload", status_code=201)
 async def upload_file(
     file: UploadFile = File(...),

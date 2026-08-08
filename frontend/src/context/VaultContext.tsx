@@ -46,6 +46,14 @@ export const VaultProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         const status = await apiService.checkStatus();
         setIsUnlocked(status.is_unlocked);
         setAutoLockMinutes(status.auto_lock_minutes);
+        if (status.is_unlocked) {
+          const [fetchedItems, fetchedCategories] = await Promise.all([
+            apiService.getItems(),
+            apiService.getCategories(),
+          ]);
+          setItems(fetchedItems);
+          setCategories(fetchedCategories);
+        }
       } catch (err) {
         console.error('Failed to check status:', err);
       }

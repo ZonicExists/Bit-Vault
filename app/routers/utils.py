@@ -140,7 +140,7 @@ def generate_totp_secret(
 ):
     secret = pyotp.random_base32()
     totp = pyotp.TOTP(secret)
-    otpauth_url = totp.provisioning_uri(name=account_name, issuer_name="Custom Vault")
+    otpauth_url = totp.provisioning_uri(name=account_name, issuer_name="Bit Vault")
 
     return success_response({
         "secret": secret,

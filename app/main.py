@@ -14,7 +14,7 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(
-    title="Custom Vault API",
+    title="Bit Vault API",
     description="Secure, encrypted personal vault API built with FastAPI and SQLite",
     version="1.0.0",
     lifespan=lifespan
@@ -77,13 +77,21 @@ app.include_router(audit.router)
 app.include_router(backup.router)
 app.include_router(settings_router.router)
 
-@app.get("/")
-def root():
-    return {
-        "success": True,
-        "message": "Custom Vault API is running",
-        "docs": "/docs"
-    }
+import os
+from fastapi.staticfiles import StaticFiles
+
+# Mount static frontend build if present
+frontend_build = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "build")
+if os.path.exists(frontend_build):
+    app.mount("/", StaticFiles(directory=frontend_build, html=True), name="frontend")
+else:
+    @app.get("/")
+    def root():
+        return {
+            "success": True,
+            "message": "Custom Vault API is running",
+            "docs": "/docs"
+        }
 
 if __name__ == "__main__":
     import uvicorn

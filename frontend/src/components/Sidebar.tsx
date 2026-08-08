@@ -34,7 +34,7 @@ export const Sidebar: React.FC = () => {
           >
             All Items
           </button>
-          {(['login', 'note', 'card'] as const).map((type) => (
+          {(['login', 'totp', 'note', 'card'] as const).map((type) => (
             <button
               key={type}
               onClick={() => handleFilterChange(type, filterCategory)}
@@ -44,10 +44,21 @@ export const Sidebar: React.FC = () => {
                   : 'hover:bg-vault-light text-vault-dark'
               }`}
             >
-              <span>{type === 'login' ? '👤' : type === 'note' ? '📝' : '💳'}</span>
-              {type.charAt(0).toUpperCase() + type.slice(1)}
+              <span>{type === 'login' ? '👤' : type === 'totp' ? '🔑' : type === 'note' ? '📝' : '💳'}</span>
+              {type === 'totp' ? '2FA Code' : type.charAt(0).toUpperCase() + type.slice(1)}
             </button>
           ))}
+          <button
+            onClick={() => handleFilterChange('files', filterCategory)}
+            className={`w-full text-left px-3 py-2 rounded-lg transition text-sm flex items-center gap-2 ${
+              filterType === 'files'
+                ? 'bg-vault-emerald text-vault-white'
+                : 'hover:bg-vault-light text-vault-dark'
+            }`}
+          >
+            <span>📁</span>
+            Secure Files
+          </button>
         </div>
       </div>
 

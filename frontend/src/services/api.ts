@@ -1,11 +1,23 @@
 import axios, { AxiosInstance } from 'axios';
-import { ApiResponse, VaultItem, VaultFile, Category, VaultSettings, SessionStatus } from '../types';
+import {
+  ApiResponse,
+  VaultItem,
+  VaultFile,
+  Category,
+  VaultSettings,
+  SessionStatus,
+  PasswordGenOptions,
+  PasswordGenResult,
+  PwnedCheckResult,
+  TotpSecretResult,
+  SecurityAuditScore
+} from '../types';
 
 class ApiService {
   private api: AxiosInstance;
   // Use environment variable REACT_APP_API_URL if provided (e.g. http://127.0.0.1:4000)
   // Default to the requested local FastAPI server
-  private baseURL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:4000';
+  private baseURL = process.env.REACT_APP_API_URL || (typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'http://127.0.0.1:4000');
 
   constructor() {
     this.api = axios.create({
@@ -151,6 +163,40 @@ class ApiService {
         'Content-Type': 'multipart/form-data',
       },
     });
+    return response.data.data;
+  }
+
+  // ============ Security & Utility Tools ============
+
+  async getFiles(): Promise<VaultFile[]> {
+    const response = await this.api.get<ApiResponse<VaultFile[]>>('/api/files');
+    return response.data.data;
+  }
+
+  async generatePassword(options?: PasswordGenOptions): Promise<PasswordGenResult> {
+    const response = await this.api.post<ApiResponse<PasswordGenResult>>('/api/utils/generate-password', options || {});
+    return response.data.data;
+  }
+
+  async checkPwned(password: string): Promise<PwnedCheckResult> {
+    const response = await this.api.post<ApiResponse<PwnedCheckResult>>('/api/utils/check-pwned', { password });
+    return response.data.data;
+  }
+
+  async generateTotpSecret(accountName?: string): Promise<TotpSecretResult> {
+    const response = await this.api.post<ApiResponse<TotpSecretResult>>('/api/utils/totp/generate-secret', null, {
+      params: { account_name: accountName || 'Vault User' }
+    });
+    return response.data.data;
+  }
+
+  async verifyTotpCode(secret: string, code: string): Promise<{ is_valid: boolean }> {
+    const response = await this.api.post<ApiResponse<{ is_valid: boolean }>>('/api/utils/totp/verify', { secret, code });
+    return response.data.data;
+  }
+
+  async getSecurityScore(): Promise<SecurityAuditScore> {
+    const response = await this.api.get<ApiResponse<SecurityAuditScore>>('/api/audit/security-score');
     return response.data.data;
   }
 }

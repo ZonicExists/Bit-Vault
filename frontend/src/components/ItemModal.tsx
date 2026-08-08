@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { VaultItem, ItemType, LoginPayload, NotePayload, CardPayload } from '../types';
+import { VaultItem, ItemType, LoginPayload, TotpPayload, NotePayload, CardPayload } from '../types';
 import { apiService } from '../services/api';
 import { useVault } from '../context/VaultContext';
 
 interface ItemModalProps {
   item?: VaultItem | null;
+  defaultType?: ItemType;
   isOpen: boolean;
   onClose: () => void;
   onSave: () => void;
 }
 
-export const ItemModal: React.FC<ItemModalProps> = ({ item, isOpen, onClose, onSave }) => {
+export const ItemModal: React.FC<ItemModalProps> = ({ item, defaultType = 'login', isOpen, onClose, onSave }) => {
   const [itemType, setItemType] = useState<ItemType>('login');
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
@@ -25,6 +26,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({ item, isOpen, onClose, onS
   const [password, setPassword] = useState('');
   const [url, setUrl] = useState('');
   const [notes, setNotes] = useState('');
+  const [totpSecret, setTotpSecret] = useState('');
   const [noteContent, setNoteContent] = useState('');
   const [cardholder, setCardholder] = useState('');
   const [cardNumber, setCardNumber] = useState('');
@@ -35,31 +37,56 @@ export const ItemModal: React.FC<ItemModalProps> = ({ item, isOpen, onClose, onS
   const { categories, setError: setContextError } = useVault();
 
   useEffect(() => {
-    if (item) {
-      setTitle(item.title);
-      setItemType(item.type);
-      setTags(item.tags);
-      setCategoryId(item.category_id);
+    if (isOpen) {
+      if (item) {
+        setTitle(item.title);
+        setItemType(item.type);
+        setTags(item.tags);
+        setCategoryId(item.category_id);
 
-      if (item.type === 'login') {
-        const payload = item.payload as LoginPayload;
-        setUsername(payload.username);
-        setPassword(payload.password);
-        setUrl(payload.url || '');
-        setNotes(payload.notes || '');
-      } else if (item.type === 'note') {
-        const payload = item.payload as NotePayload;
-        setNoteContent(payload.content);
-      } else if (item.type === 'card') {
-        const payload = item.payload as CardPayload;
-        setCardholder(payload.cardholder_name);
-        setCardNumber(payload.card_number);
-        setExpiryMonth(payload.expiry_month);
-        setExpiryYear(payload.expiry_year);
-        setCvv(payload.cvv);
+        if (item.type === 'login') {
+          const payload = item.payload as LoginPayload;
+          setUsername(payload.username);
+          setPassword(payload.password);
+          setUrl(payload.url || '');
+          setNotes(payload.notes || '');
+        } else if (item.type === 'totp') {
+          const payload = item.payload as any;
+          setTotpSecret(payload.secret || '');
+          setUsername(payload.account_name || '');
+        } else if (item.type === 'note') {
+          const payload = item.payload as NotePayload;
+          setNoteContent(payload.content);
+        } else if (item.type === 'card') {
+          const payload = item.payload as CardPayload;
+          setCardholder(payload.cardholder_name);
+          setCardNumber(payload.card_number);
+          setExpiryMonth(payload.expiry_month);
+          setExpiryYear(payload.expiry_year);
+          setCvv(payload.cvv);
+        }
+      } else {
+        // Reset form for creating new item and pre-select current section itemType
+        setItemType(defaultType || 'login');
+        setTitle('');
+        setTags([]);
+        setTagInput('');
+        setCategoryId(null);
+        setUsername('');
+        setPassword('');
+        setUrl('');
+        setNotes('');
+        setTotpSecret('');
+        setNoteContent('');
+        setCardholder('');
+        setCardNumber('');
+        setExpiryMonth('');
+        setExpiryYear('');
+        setCvv('');
+        setError('');
       }
     }
-  }, [item]);
+  }, [item, isOpen, defaultType]);
 
   if (!isOpen) return null;
 
@@ -85,10 +112,17 @@ export const ItemModal: React.FC<ItemModalProps> = ({ item, isOpen, onClose, onS
       setIsLoading(true);
       setError('');
 
-      let payload: LoginPayload | NotePayload | CardPayload;
+      let payload: LoginPayload | TotpPayload | NotePayload | CardPayload;
 
       if (itemType === 'login') {
         payload = { username, password, url, notes };
+      } else if (itemType === 'totp') {
+        if (!totpSecret.trim()) {
+          setError('Base32 Secret Key is required');
+          setIsLoading(false);
+          return;
+        }
+        payload = { secret: totpSecret.trim(), account_name: username.trim() || undefined };
       } else if (itemType === 'note') {
         payload = { content: noteContent };
       } else {
@@ -155,19 +189,19 @@ export const ItemModal: React.FC<ItemModalProps> = ({ item, isOpen, onClose, onS
             <label className="block text-sm font-medium text-vault-dark mb-2">
               Item Type
             </label>
-            <div className="grid grid-cols-3 gap-3">
-              {(['login', 'note', 'card'] as ItemType[]).map((type) => (
+            <div className="grid grid-cols-4 gap-2">
+              {(['login', 'totp', 'note', 'card'] as ItemType[]).map((type) => (
                 <button
                   key={type}
                   type="button"
                   onClick={() => setItemType(type)}
-                  className={`py-2 px-3 rounded-lg font-medium transition ${
+                  className={`py-2 px-2 rounded-lg font-medium text-xs transition truncate ${
                     itemType === type
                       ? 'bg-vault-emerald text-vault-white'
                       : 'bg-vault-light text-vault-dark hover:bg-gray-300'
                   }`}
                 >
-                  {type === 'login' ? '👤 Login' : type === 'note' ? '📝 Note' : '💳 Card'}
+                  {type === 'login' ? '👤 Login' : type === 'totp' ? '🔑 2FA' : type === 'note' ? '📝 Note' : '💳 Card'}
                 </button>
               ))}
             </div>
@@ -295,6 +329,38 @@ export const ItemModal: React.FC<ItemModalProps> = ({ item, isOpen, onClose, onS
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Additional notes"
                   rows={3}
+                  className="w-full px-3 py-2 border border-vault-light rounded-lg focus:outline-none focus:border-vault-emerald"
+                />
+              </div>
+            </div>
+          )}
+
+          {itemType === 'totp' && (
+            <div className="space-y-4 bg-vault-light/30 p-4 rounded-lg">
+              <div>
+                <label className="block text-sm font-medium text-vault-dark mb-2">
+                  Base32 Secret Key *
+                </label>
+                <input
+                  type="text"
+                  value={totpSecret}
+                  onChange={(e) => setTotpSecret(e.target.value.toUpperCase().replace(/[^A-Z2-7]/g, ''))}
+                  placeholder="Base32 Secret Key (e.g. JBSWY3DPEHPK3PXP)"
+                  className="w-full px-3 py-2 border border-vault-light rounded-lg focus:outline-none focus:border-vault-emerald font-mono uppercase text-sm"
+                />
+                <p className="text-xs text-vault-gray mt-1">
+                  Enter your Base32 2FA secret key to generate live 6-digit authenticator codes.
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-vault-dark mb-2">
+                  Account / Username (optional)
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="e.g. user@domain.com"
                   className="w-full px-3 py-2 border border-vault-light rounded-lg focus:outline-none focus:border-vault-emerald"
                 />
               </div>

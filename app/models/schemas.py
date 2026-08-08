@@ -1,13 +1,17 @@
 from typing import Literal, Optional, Any, Union
 from pydantic import BaseModel, Field
 
-ItemType = Literal['login', 'note', 'card']
+ItemType = Literal['login', 'totp', 'note', 'card']
 
 class LoginPayload(BaseModel):
     username: str
     password: str
     url: Optional[str] = None
     notes: Optional[str] = None
+
+class TotpPayload(BaseModel):
+    secret: str
+    account_name: Optional[str] = None
 
 class NotePayload(BaseModel):
     content: str
@@ -26,7 +30,7 @@ class VaultItemCreate(BaseModel):
     category_id: Optional[str] = None
     tags: list[str] = Field(default_factory=list)
     is_favorite: bool = False
-    payload: Union[LoginPayload, NotePayload, CardPayload, dict]
+    payload: Union[LoginPayload, TotpPayload, NotePayload, CardPayload, dict]
 
 class VaultItemUpdate(BaseModel):
     title: Optional[str] = None
