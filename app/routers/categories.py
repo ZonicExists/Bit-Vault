@@ -46,3 +46,14 @@ def get_tags(
     rows = cursor.fetchall()
     tags = [Tag(**row).model_dump() for row in rows]
     return success_response(tags)
+
+@router.delete("/api/categories/{cat_id}")
+def delete_category(
+    cat_id: str,
+    db: sqlite3.Connection = Depends(get_db),
+    master_key: bytes = Depends(require_unlocked_vault)
+):
+    cursor = db.cursor()
+    cursor.execute("DELETE FROM categories WHERE id = ?;", (cat_id,))
+    db.commit()
+    return success_response({"id": cat_id})

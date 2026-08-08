@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.db.database import init_db
-from app.routers import auth, items, files, categories, utils, audit, backup
+from app.routers import auth, items, files, categories, utils, audit, backup, settings as settings_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -75,6 +75,7 @@ app.include_router(categories.router)
 app.include_router(utils.router)
 app.include_router(audit.router)
 app.include_router(backup.router)
+app.include_router(settings_router.router)
 
 @app.get("/")
 def root():
